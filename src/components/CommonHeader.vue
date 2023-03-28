@@ -5,7 +5,7 @@
         icon="el-icon-menu"
         size="mini"
         @click="handleMenu"
-        style="margin-right:20px"
+        style="margin-right: 20px"
       ></el-button>
       <!-- 面包屑 -->
       <el-breadcrumb separator="/">
@@ -18,13 +18,15 @@
       </el-breadcrumb>
     </div>
     <div class="r-content">
-      <el-dropdown>
+      <el-dropdown @command="handleClick">
         <span class="el-dropdown-link">
           <img class="user" src="../assets/images/user.jpg" alt="" />
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item icon="el-icon-plus">个人中心</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-circle-plus">退出</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-circle-plus" command="cancel"
+            >退出</el-dropdown-item
+          >
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -33,6 +35,7 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
+import Cookie from "js-cookie";
 export default {
   name: "CommonHeader",
   data() {
@@ -42,6 +45,15 @@ export default {
     handleMenu() {
       // console.log(this.$store);
       this.$store.commit("collapseMenu");
+    },
+    handleClick(command) {
+      if (command === "cancel") {
+        // 清除token
+        Cookie.remove("token");
+        // 清除menu
+        Cookie.remove("menu");
+        this.$router.push("/login");
+      }
     },
   },
   computed: {
